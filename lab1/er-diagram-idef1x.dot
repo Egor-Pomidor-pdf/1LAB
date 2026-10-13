@@ -1,0 +1,76 @@
+digraph IDEF1X {
+    graph [rankdir=LR, splines=spline, nodesep=0.8, ranksep=1.7, bgcolor="white",
+           fontname="Helvetica", labelloc="t", fontsize=20,
+           label="Система бронирования гостиниц — ER-диаграмма (IDEF1X)"];
+    node  [shape=plaintext, fontname="Helvetica", fontsize=11];
+    // неидентифицирующая связь: пунктир, закрашенная точка на стороне «многие»
+    edge  [style=dashed, color="#333333", penwidth=1.2, arrowhead=dot, arrowsize=0.9,
+           fontname="Helvetica", fontsize=10];
+
+    hotels [label=<
+      <TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0">
+        <TR><TD ALIGN="LEFT"><B>HOTELS</B></TD></TR>
+        <TR><TD>
+          <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="5" BGCOLOR="white">
+            <TR><TD ALIGN="LEFT">id</TD></TR><HR/><TR><TD ALIGN="LEFT">name</TD></TR><TR><TD ALIGN="LEFT">city</TD></TR><TR><TD ALIGN="LEFT">address</TD></TR><TR><TD ALIGN="LEFT">stars</TD></TR><TR><TD ALIGN="LEFT">phone</TD></TR>
+          </TABLE>
+        </TD></TR>
+      </TABLE>>];
+
+    room_types [label=<
+      <TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0">
+        <TR><TD ALIGN="LEFT"><B>ROOM_TYPES</B></TD></TR>
+        <TR><TD>
+          <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="5" BGCOLOR="white">
+            <TR><TD ALIGN="LEFT">id</TD></TR><HR/><TR><TD ALIGN="LEFT">name</TD></TR><TR><TD ALIGN="LEFT">capacity</TD></TR><TR><TD ALIGN="LEFT">base_price</TD></TR>
+          </TABLE>
+        </TD></TR>
+      </TABLE>>];
+
+    rooms [label=<
+      <TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0">
+        <TR><TD ALIGN="LEFT"><B>ROOMS</B></TD></TR>
+        <TR><TD>
+          <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="5" BGCOLOR="white">
+            <TR><TD ALIGN="LEFT">id</TD></TR><HR/><TR><TD ALIGN="LEFT">hotel_id (FK)</TD></TR><TR><TD ALIGN="LEFT">type_id (FK)</TD></TR><TR><TD ALIGN="LEFT">room_number</TD></TR><TR><TD ALIGN="LEFT">floor</TD></TR>
+          </TABLE>
+        </TD></TR>
+      </TABLE>>];
+
+    guests [label=<
+      <TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0">
+        <TR><TD ALIGN="LEFT"><B>GUESTS</B></TD></TR>
+        <TR><TD>
+          <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="5" BGCOLOR="white">
+            <TR><TD ALIGN="LEFT">id</TD></TR><HR/><TR><TD ALIGN="LEFT">first_name</TD></TR><TR><TD ALIGN="LEFT">last_name</TD></TR><TR><TD ALIGN="LEFT">passport_no</TD></TR><TR><TD ALIGN="LEFT">email</TD></TR><TR><TD ALIGN="LEFT">phone</TD></TR><TR><TD ALIGN="LEFT">birth_date</TD></TR>
+          </TABLE>
+        </TD></TR>
+      </TABLE>>];
+
+    bookings [label=<
+      <TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0">
+        <TR><TD ALIGN="LEFT"><B>BOOKINGS</B></TD></TR>
+        <TR><TD>
+          <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="5" BGCOLOR="white">
+            <TR><TD ALIGN="LEFT">id</TD></TR><HR/><TR><TD ALIGN="LEFT">guest_id (FK)</TD></TR><TR><TD ALIGN="LEFT">room_id (FK)</TD></TR><TR><TD ALIGN="LEFT">check_in</TD></TR><TR><TD ALIGN="LEFT">check_out</TD></TR><TR><TD ALIGN="LEFT">guests_count</TD></TR><TR><TD ALIGN="LEFT">status</TD></TR><TR><TD ALIGN="LEFT">total_price</TD></TR><TR><TD ALIGN="LEFT">created_at</TD></TR>
+          </TABLE>
+        </TD></TR>
+      </TABLE>>];
+
+    payments [label=<
+      <TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0">
+        <TR><TD ALIGN="LEFT"><B>PAYMENTS</B></TD></TR>
+        <TR><TD>
+          <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="5" BGCOLOR="white">
+            <TR><TD ALIGN="LEFT">id</TD></TR><HR/><TR><TD ALIGN="LEFT">booking_id (FK)</TD></TR><TR><TD ALIGN="LEFT">amount</TD></TR><TR><TD ALIGN="LEFT">paid_at</TD></TR><TR><TD ALIGN="LEFT">method</TD></TR>
+          </TABLE>
+        </TD></TR>
+      </TABLE>>];
+
+
+    hotels      -> rooms     [label="содержит"];
+    room_types  -> rooms     [label="определяет"];
+    guests      -> bookings  [label="оформляет"];
+    rooms       -> bookings  [label="бронируется в"];
+    bookings    -> payments  [label="оплачивается"];
+}
