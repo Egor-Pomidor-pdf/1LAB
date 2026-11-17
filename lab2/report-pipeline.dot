@@ -1,0 +1,48 @@
+digraph REPORT {
+    graph [rankdir=LR, splines=spline, nodesep=0.5, ranksep=1.1, bgcolor="white",
+           fontname="Helvetica", labelloc="t", fontsize=20,
+           label="Отчёт по загрузке и выручке отелей — схема вычислений"];
+    node  [shape=plaintext, fontname="Helvetica", fontsize=11];
+    edge  [color="#333333", penwidth=1.2, fontname="Helvetica", fontsize=10];
+
+    stage1 [label=<
+      <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="5">
+        <TR><TD BGCOLOR="#4A6FA5"><FONT COLOR="white"><B>Исходные данные</B></FONT></TD></TR>
+        <TR><TD ALIGN="LEFT">period — границы периода</TD></TR>
+        <TR><TD ALIGN="LEFT">booking_src — bookings + rooms,</TD></TR>
+        <TR><TD ALIGN="LEFT">отфильтрованные по check_in</TD></TR>
+      </TABLE>>];
+
+    stage2 [label=<
+      <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="5">
+        <TR><TD BGCOLOR="#4A6FA5"><FONT COLOR="white"><B>Промежуточные показатели</B></FONT></TD></TR>
+        <TR><TD ALIGN="LEFT">booking_metrics — на каждую бронь:</TD></TR>
+        <TR><TD ALIGN="LEFT">nights = check_out − check_in,</TD></TR>
+        <TR><TD ALIGN="LEFT">paid_amount = сумма платежей</TD></TR>
+      </TABLE>>];
+
+    stage3 [label=<
+      <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="5">
+        <TR><TD BGCOLOR="#4A6FA5"><FONT COLOR="white"><B>Агрегация</B></FONT></TD></TR>
+        <TR><TD ALIGN="LEFT">hotel_totals — брони, отмены,</TD></TR>
+        <TR><TD ALIGN="LEFT">проданные ночи, начислено, получено</TD></TR>
+        <TR><TD ALIGN="LEFT">hotel_capacity — доступные</TD></TR>
+        <TR><TD ALIGN="LEFT">номеро-ночи</TD></TR>
+        <TR><TD ALIGN="LEFT">type_revenue → top_type —</TD></TR>
+        <TR><TD ALIGN="LEFT">категория-лидер отеля</TD></TR>
+      </TABLE>>];
+
+    stage4 [label=<
+      <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="5">
+        <TR><TD BGCOLOR="#4A6FA5"><FONT COLOR="white"><B>Итоговый отчёт</B></FONT></TD></TR>
+        <TR><TD ALIGN="LEFT">строка на отель:</TD></TR>
+        <TR><TD ALIGN="LEFT">occupancy_pct, cancel_rate_pct,</TD></TR>
+        <TR><TD ALIGN="LEFT">collection_pct, debt,</TD></TR>
+        <TR><TD ALIGN="LEFT">avg_booking, max_booking,</TD></TR>
+        <TR><TD ALIGN="LEFT">top_room_type</TD></TR>
+      </TABLE>>];
+
+    stage1 -> stage2 [label="36 броней"];
+    stage2 -> stage3 [label="GROUP BY hotel_id"];
+    stage3 -> stage4 [label="LEFT JOIN с hotels"];
+}
